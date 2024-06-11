@@ -34,7 +34,8 @@ const Index = () => {
 
   const handleStop = (e, data, index) => {
     const newLabels = [...labels];
-    newLabels[index] = { ...newLabels[index], x: data.x, y: data.y };
+    const rect = e.target.getBoundingClientRect();
+    newLabels[index] = { ...newLabels[index], x: data.x - rect.left, y: data.y - rect.top };
     setLabels(newLabels);
   };
 
@@ -60,6 +61,7 @@ const Index = () => {
                   borderRadius="md"
                   boxShadow="md"
                   cursor="move"
+                  style={{ top: `${label.y}px`, left: `${label.x}px` }}
                 >
                   {label.text}
                 </Text>
