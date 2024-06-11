@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, VStack, Text, Input, Button, Image, Box } from "@chakra-ui/react";
+import Draggable from "react-draggable";
 
 const Index = () => {
   const [image, setImage] = useState(null);
