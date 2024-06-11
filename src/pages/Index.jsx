@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, VStack, Text, Input, Button, Image, Box } from "@chakra-ui/react";
 import Draggable from "react-draggable";
+import { FaTrash } from 'react-icons/fa';
 
 const Index = () => {
   const [image, setImage] = useState(null);
@@ -38,6 +39,11 @@ const Index = () => {
     setLabels(newLabels);
   };
 
+  const handleDeleteLabel = (index) => {
+    const newLabels = labels.filter((_, i) => i !== index);
+    setLabels(newLabels);
+  };
+
   return (
     <Container centerContent maxW="container.md" py={10}>
       <VStack spacing={4} width="100%">
@@ -52,7 +58,7 @@ const Index = () => {
                 position={{ x: label.x, y: label.y }}
                 onStop={(e, data) => handleDrag(index, e, data)}
               >
-                <Text
+                <Box
                   position="absolute"
                   bg="white"
                   px={2}
@@ -62,8 +68,16 @@ const Index = () => {
                   cursor="move"
                   style={{ transform: `translate(${label.x}px, ${label.y}px)` }}
                 >
-                  {label.text}
-                </Text>
+                  <Text>{label.text}</Text>
+                  <Button
+                    size="xs"
+                    colorScheme="red"
+                    onClick={() => handleDeleteLabel(index)}
+                    ml={2}
+                  >
+                    <FaTrash />
+                  </Button>
+                </Box>
               </Draggable>
             ))}
           </Box>
