@@ -18,7 +18,7 @@ const Index = () => {
   };
 
   const handleImageClick = (event) => {
-    const rect = event.target.getBoundingClientRect();
+    const rect = event.currentTarget.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     setCurrentLabel({ x, y });
@@ -34,8 +34,7 @@ const Index = () => {
 
   const handleStop = (e, data, index) => {
     const newLabels = [...labels];
-    const rect = e.target.getBoundingClientRect();
-    newLabels[index] = { ...newLabels[index], x: data.x - rect.left, y: data.y - rect.top };
+    newLabels[index] = { ...newLabels[index], x: data.x, y: data.y };
     setLabels(newLabels);
   };
 
@@ -61,7 +60,7 @@ const Index = () => {
                   borderRadius="md"
                   boxShadow="md"
                   cursor="move"
-                  style={{ top: `${label.y}px`, left: `${label.x}px` }}
+                  style={{ transform: `translate(${label.x}px, ${label.y}px)` }}
                 >
                   {label.text}
                 </Text>
