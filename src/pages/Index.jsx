@@ -18,7 +18,7 @@ const Index = () => {
   };
 
   const handleImageClick = (event) => {
-    const rect = event.target.getBoundingClientRect();
+    const rect = event.currentTarget.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     setCurrentLabel({ x, y });
@@ -60,6 +60,7 @@ const Index = () => {
                   borderRadius="md"
                   boxShadow="md"
                   cursor="move"
+                  style={{ transform: `translate(${label.x}px, ${label.y}px)` }}
                 >
                   {label.text}
                 </Text>
