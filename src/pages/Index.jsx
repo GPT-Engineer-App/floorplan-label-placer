@@ -1,17 +1,71 @@
-// Update this page (the content is just a fallback if you fail and example)
-// Use chakra-ui
-import { Container, Text, VStack } from "@chakra-ui/react";
-
-// Example of using react-icons
-// import { FaRocket } from "react-icons/fa";
-// <IconButton aria-label="Add" icon={<FaRocket />} size="lg" />; // IconButton would also have to be imported from chakra
+import React, { useState } from "react";
+import { Container, VStack, Text, Input, Button, Image, Box } from "@chakra-ui/react";
 
 const Index = () => {
+  const [image, setImage] = useState(null);
+  const [labels, setLabels] = useState([]);
+  const [labelText, setLabelText] = useState("");
+  const [currentLabel, setCurrentLabel] = useState(null);
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleImageClick = (event) => {
+    const rect = event.target.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    setCurrentLabel({ x, y });
+  };
+
+  const handleAddLabel = () => {
+    if (currentLabel && labelText) {
+      setLabels([...labels, { ...currentLabel, text: labelText }]);
+      setLabelText("");
+      setCurrentLabel(null);
+    }
+  };
+
   return (
-    <Container centerContent maxW="container.md" height="100vh" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-      <VStack spacing={4}>
-        <Text fontSize="2xl">Your Blank Canvas</Text>
-        <Text>Chat with the agent to start making edits.</Text>
+    <Container centerContent maxW="container.md" py={10}>
+      <VStack spacing={4} width="100%">
+        <Text fontSize="2xl">Upload Floor Plan</Text>
+        <Input type="file" accept="image/*" onChange={handleImageUpload} />
+        {image && (
+          <Box position="relative" width="100%" onClick={handleImageClick}>
+            <Image src={image} alt="Floor Plan" width="100%" />
+            {labels.map((label, index) => (
+              <Text
+                key={index}
+                position="absolute"
+                left={`${label.x}px`}
+                top={`${label.y}px`}
+                bg="white"
+                px={2}
+                py={1}
+                borderRadius="md"
+                boxShadow="md"
+              >
+                {label.text}
+              </Text>
+            ))}
+          </Box>
+        )}
+        {currentLabel && (
+          <VStack spacing={2} width="100%">
+            <Input
+              placeholder="Label text"
+              value={labelText}
+              onChange={(e) => setLabelText(e.target.value)}
+            />
+            <Button onClick={handleAddLabel}>Add Label</Button>
+          </VStack>
+        )}
       </VStack>
     </Container>
   );
