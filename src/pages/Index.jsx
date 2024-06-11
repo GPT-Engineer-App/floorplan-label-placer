@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Draggable from "react-draggable";
 import { Container, VStack, Text, Input, Button, Image, Box } from "@chakra-ui/react";
+import Draggable from "react-draggable";
 
 const Index = () => {
   const [image, setImage] = useState(null);
@@ -32,7 +32,7 @@ const Index = () => {
     }
   };
 
-  const handleDrag = (index, e, data) => {
+  const handleStop = (e, data, index) => {
     const newLabels = [...labels];
     newLabels[index] = { ...newLabels[index], x: data.x, y: data.y };
     setLabels(newLabels);
@@ -49,8 +49,8 @@ const Index = () => {
             {labels.map((label, index) => (
               <Draggable
                 key={index}
-                position={{ x: label.x, y: label.y }}
-                onStop={(e, data) => handleDrag(index, e, data)}
+                defaultPosition={{ x: label.x, y: label.y }}
+                onStop={(e, data) => handleStop(e, data, index)}
               >
                 <Text
                   position="absolute"
