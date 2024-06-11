@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Draggable from "react-draggable";
 import { Container, VStack, Text, Input, Button, Image, Box } from "@chakra-ui/react";
 
 const Index = () => {
@@ -31,6 +32,12 @@ const Index = () => {
     }
   };
 
+  const handleDrag = (index, e, data) => {
+    const newLabels = [...labels];
+    newLabels[index] = { ...newLabels[index], x: data.x, y: data.y };
+    setLabels(newLabels);
+  };
+
   return (
     <Container centerContent maxW="container.md" py={10}>
       <VStack spacing={4} width="100%">
@@ -40,19 +47,23 @@ const Index = () => {
           <Box position="relative" width="100%" onClick={handleImageClick}>
             <Image src={image} alt="Floor Plan" width="100%" />
             {labels.map((label, index) => (
-              <Text
+              <Draggable
                 key={index}
-                position="absolute"
-                left={`${label.x}px`}
-                top={`${label.y}px`}
-                bg="white"
-                px={2}
-                py={1}
-                borderRadius="md"
-                boxShadow="md"
+                position={{ x: label.x, y: label.y }}
+                onStop={(e, data) => handleDrag(index, e, data)}
               >
-                {label.text}
-              </Text>
+                <Text
+                  position="absolute"
+                  bg="white"
+                  px={2}
+                  py={1}
+                  borderRadius="md"
+                  boxShadow="md"
+                  cursor="move"
+                >
+                  {label.text}
+                </Text>
+              </Draggable>
             ))}
           </Box>
         )}
